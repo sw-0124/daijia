@@ -28,7 +28,24 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    // 用自定义Feign进行结果解析 避免代码冗余
     @Override
+    public String login(String code) {
+        Long customerId = customerInfoFeignClient.login(code).getData();
+
+        // 将用户id存入redis
+        String token = UUID.randomUUID().toString().replaceAll("-", "");
+        redisTemplate.opsForValue().set(RedisConstant.USER_LOGIN_KEY_PREFIX+token, customerId.toString(), RedisConstant.USER_LOGIN_KEY_TIMEOUT, TimeUnit.SECONDS);
+        return token;
+    }
+
+    @Override
+    public CustomerLoginVo getCustomerLoginInfo(Long customerId) {
+        return customerInfoFeignClient.getCustomerLoginInfo(customerId).getData();
+    }
+
+
+      /* @Override
     public String login(String code) {
         // 获取用户id
         Result<Long> result = customerInfoFeignClient.login(code);
@@ -44,7 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
         String token = UUID.randomUUID().toString().replaceAll("-", "");
         redisTemplate.opsForValue().set(RedisConstant.USER_LOGIN_KEY_PREFIX + token, customerId.toString(), RedisConstant.USER_LOGIN_KEY_TIMEOUT, TimeUnit.SECONDS);
         return token;
-    }
+    }*/
 
   /*  @Override
     public CustomerLoginVo getCustomerLoginInfo(String token) {
@@ -67,7 +84,9 @@ public class CustomerServiceImpl implements CustomerService {
         return customerLoginVo;
     }*/
 
-    public CustomerLoginVo getCustomerLoginInfo(Long customerId) {
+/*      //使用自定义注解+aop校验登录信息
+        public CustomerLoginVo getCustomerLoginInfo(Long customerId) {
+
         // 远程调用查询登录信息
         Result<CustomerLoginVo> result = customerInfoFeignClient.getCustomerLoginInfo(customerId);
         Integer code = result.getCode();
@@ -79,5 +98,5 @@ public class CustomerServiceImpl implements CustomerService {
             throw new GuiguException(ResultCodeEnum.DATA_ERROR);
         }
         return customerLoginVo;
-    }
+    }*/
 }

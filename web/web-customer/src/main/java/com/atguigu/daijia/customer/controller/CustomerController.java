@@ -31,7 +31,6 @@ public class CustomerController {
         return Result.ok(true);
     }
 
-
     @Operation(summary = "获取客户登录信息")
     @GetMapping("/getCustomerLoginInfo")
     @GuiguLogin

@@ -8,7 +8,7 @@ import lombok.Data;
  *
  */
 @Data
-public class Result<T> {
+public class  Result<T> {
 
     //返回码
     private Integer code;

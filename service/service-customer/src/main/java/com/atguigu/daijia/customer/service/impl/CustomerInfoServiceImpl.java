@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Slf4j
@@ -34,6 +35,7 @@ public class CustomerInfoServiceImpl extends ServiceImpl<CustomerInfoMapper, Cus
     WxMaService wxMaService;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long login(String code) {
         // 获取code值，使用微信工具包对象，获取微信唯一标识openid
         String openid = null;

@@ -1,14 +1,19 @@
 package com.atguigu.daijia.driver.service.impl;
 
 import com.atguigu.daijia.common.constant.RedisConstant;
+import com.atguigu.daijia.common.execption.GuiguException;
 import com.atguigu.daijia.common.result.Result;
+import com.atguigu.daijia.common.result.ResultCodeEnum;
 import com.atguigu.daijia.driver.client.DriverInfoFeignClient;
 import com.atguigu.daijia.driver.service.DriverService;
 import com.atguigu.daijia.model.entity.driver.DriverInfo;
+import com.atguigu.daijia.model.entity.driver.DriverSet;
 import com.atguigu.daijia.model.form.driver.DriverFaceModelForm;
 import com.atguigu.daijia.model.form.driver.UpdateDriverAuthInfoForm;
+import com.atguigu.daijia.model.form.map.UpdateDriverLocationForm;
 import com.atguigu.daijia.model.vo.driver.DriverAuthInfoVo;
 import com.atguigu.daijia.model.vo.driver.DriverLoginVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.core.DefaultInstanceManager;
 import org.springframework.beans.BeanUtils;
@@ -29,6 +34,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
 
     //司机登录
     @Override
@@ -61,4 +67,5 @@ public class DriverServiceImpl implements DriverService {
     public Boolean creatDriverFaceModel(DriverFaceModelForm driverFaceModelForm) {
         return driverInfoFeignClient.creatDriverFaceModel(driverFaceModelForm).getData();
     }
+
 }

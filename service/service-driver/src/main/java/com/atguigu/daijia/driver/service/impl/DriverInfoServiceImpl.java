@@ -82,7 +82,7 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
             DriverInfo driverInfo = driverInfoMapper.selectOne(wrapper);
 
             if(driverInfo == null) {
-                //添加司机基本信息
+                // 司机没登录 注册司机 添加司机相关基本信息
                 driverInfo = new DriverInfo();
                 driverInfo.setNickname(String.valueOf(System.currentTimeMillis()));
                 driverInfo.setAvatarUrl("https://oss.aliyuncs.com/aliyun_id_photo_bucket/default_handsome.jpg");
@@ -120,6 +120,7 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
     public DriverLoginVo getDriverLoginInfo(Long driverId) {
         // 根据司机id查询司机信息
         DriverInfo driverInfo = driverInfoMapper.selectById(driverId);
+        // 这里我自己加的hutool包
         DriverLoginVo driverLoginVo = BeanUtil.copyProperties(driverInfo, DriverLoginVo.class);
 
         //是否建档人脸识别
@@ -146,6 +147,8 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean updateDriverAuthInfo(UpdateDriverAuthInfoForm updateDriverAuthInfoForm) {
+        // 前端根据司机的身份证和驾驶证认证接口 收集数据 再传到后端 实现司机信息更新
+        // 其间有管理员端对司机认证状态的修改
         DriverInfo driverInfo = new DriverInfo();
         driverInfo.setId(updateDriverAuthInfoForm.getDriverId());
         BeanUtils.copyProperties(updateDriverAuthInfoForm, driverInfo);
@@ -153,7 +156,7 @@ public class DriverInfoServiceImpl extends ServiceImpl<DriverInfoMapper, DriverI
     }
 
     /**
-     * 文档地址
+     * 文档地址 创建司机人脸模型
      * https://cloud.tencent.com/document/api/867/45014
      * https://console.cloud.tencent.com/api/explorer?Product=iai&Version=2020-03-03&Action=CreatePerson
      *

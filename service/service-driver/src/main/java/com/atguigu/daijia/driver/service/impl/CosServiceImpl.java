@@ -65,8 +65,6 @@ public class CosServiceImpl implements CosService {
         // /driver/auth/0o98754.jpg
         PutObjectRequest putObjectRequest = null;
         try {
-            //1 bucket名称
-            //2
             putObjectRequest = new PutObjectRequest(tencentCloudProperties.getBucketPrivate(),
                     uploadPath,
                     file.getInputStream(),

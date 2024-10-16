@@ -35,6 +35,9 @@ public class CustomerController {
     @GetMapping("/getCustomerLoginInfo")
     @GuiguLogin
     public Result<CustomerLoginVo> getCustomerLoginInfo() {
+        // 在这里获取乘客id 最后传给client 因为两个不是服务不是同一个线程
+        //todo
+        // 还有一种解决方法 使用FeignClient的远程 请求头传参
         Long customerId = AuthContextHolder.getUserId();
         return Result.ok(customerInfoService.getCustomerLoginInfo(customerId));
     }
@@ -44,7 +47,6 @@ public class CustomerController {
     public Result<String> wxLogin(@PathVariable String code) {
         return Result.ok(customerInfoService.login(code));
     }
-
 
 }
 

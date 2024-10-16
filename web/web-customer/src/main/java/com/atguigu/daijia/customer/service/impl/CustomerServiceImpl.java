@@ -44,7 +44,6 @@ public class CustomerServiceImpl implements CustomerService {
         return customerInfoFeignClient.getCustomerLoginInfo(customerId).getData();
     }
 
-
       /* @Override
     public String login(String code) {
         // 获取用户id
